@@ -1,0 +1,760 @@
+/*!
+Theme Name: Cloud Storage
+*/
+
+// This stylesheet uses ITCSS structure 
+// https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/
+
+// Also uses BEM naming conventions where appropriate.  
+
+/*
+ ___      _   _   _
+/ __| ___| |_| |_(_)_ _  __ _ ___
+\__ \/ -_)  _|  _| | ' \/ _` (_-<
+|___/\___|\__|\__|_|_||_\__, /__/
+                        |___/
+Global variables, config switches                   
+*/
+$primary_colour: #60BFAC; // The main teal colour
+
+$mobile_breakpoint: 414px;
+$mid_breakpoint: 1172px; // Major breakpoint where content warranted a change 
+
+// Fonts
+$font_stack: Graphik, 'Open Sans', 'Helvetica Neue', 'Helevetica', Arial, sans-serif; 
+
+@font-face {
+	font-family: 'Graphik';
+    src: url('fonts/GraphikRegular.otf') format("opentype");
+	font-weight: 400;
+}
+@font-face {
+	font-family: 'Graphik';
+    src: url('fonts/GraphikMedium.otf') format("opentype");
+	font-weight: 500;
+}
+@font-face {
+	font-family: 'Graphik';
+    src: url('fonts/GraphikSemiBold.otf') format("opentype");
+	font-weight: 600;
+}
+
+/*
+ _____         _
+|_   _|__  ___| |___
+  | |/ _ \/ _ \ (_-<
+  |_|\___/\___/_/__/
+  Default mixins & functions
+*/
+
+/*
+  ___                  _
+ / __|___ _ _  ___ _ _(_)__
+| (_ / -_) ' \/ -_) '_| / _|
+ \___\___|_||_\___|_| |_\__|
+  CSS resets and normalizing rules
+*/
+
+// CSS reset from https://github.com/tidythemes/blankslate
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}html{scroll-behavior:smooth}body{line-height:1}a{text-decoration-skip-ink:auto}a[href^="tel"]{color:inherit;text-decoration:none}button{outline:0}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}q{display:inline;font-style:italic}q:before{content:'"';font-style:normal}q:after{content:'"';font-style:normal}textarea,input[type="text"],input[type="button"],input[type="submit"],input[type="reset"],input[type="search"],input[type="password"]{-webkit-appearance:none;appearance:none;border-radius:0}input[type="search"]{-webkit-appearance:textfield}table{border-collapse:collapse;border-spacing:0}th,td{padding:2px}big{font-size:120%}small,sup,sub{font-size:80%}sup{vertical-align:super}sub{vertical-align:sub}dd{margin-left:20px}kbd,tt{font-family:courier;font-size:12px}ins{text-decoration:underline}del,strike,s{text-decoration:line-through}dt{font-weight:bold}address,cite,var{font-style:italic}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+// Modern box-sizing
+html {
+  	box-sizing: border-box;
+}
+*, *:before, *:after {
+  	box-sizing: inherit;
+}
+
+/*
+ ___ _                   _
+| __| |___ _ __  ___ _ _| |_ ___
+| _|| / -_) '  \/ -_) ' \  _(_-<
+|___|_\___|_|_|_\___|_||_\__/__/
+ Unclassed HTML elements
+*/
+
+body {
+	font-family: $font_stack;
+	color: rgba(27, 27, 27, 1);
+	min-width: 377px; // So content won't squish on very small screens
+}
+
+a {	
+	// Basic link styles
+	color: $primary_colour;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+/*
+  ___  _     _        _
+ / _ \| |__ (_)___ __| |_ ___
+| (_) | '_ \| / -_) _|  _(_-<
+ \___/|_.__// \___\__|\__/__/
+          |__/
+ Class-based selectors which define undecorated design patterns 
+*/
+
+/*
+  ___                                  _
+ / __|___ _ __  _ __  ___ _ _  ___ _ _| |_ ___
+| (__/ _ \ '  \| '_ \/ _ \ ' \/ -_) ' \  _(_-<
+ \___\___/_|_|_| .__/\___/_||_\___|_||_\__/__/
+               |_|
+Designed components, chunks of UI. Where most of our work takes place.
+*/
+
+/* Site Navigation */
+.navigation {
+
+	// Fixed sidebar on large screens
+	position: fixed;
+	background: #f4f4f4;
+	width: 110px;
+	padding: 35px;
+	height: 100vh;
+	z-index: 100; // So hover state works on menu button
+
+	// Change to top bar on smaller screens
+	@media only screen and (max-width: $mid_breakpoint) {
+		position: static;
+		height: 90px;
+		width: 100%;
+		padding: 25px 20px;
+	}
+} 
+
+.body {
+	padding: 60px 118px 100px 225px;
+	opacity: 0;
+    transition: opacity .4s;
+
+	// Adjustments for smaller screens
+
+	@media only screen and (max-width: $mid_breakpoint) {
+		padding: 60px 10% 100px;
+	}
+
+	@media only screen and (max-width: 894px) {
+		padding: 60px 7% 100px;
+	}
+
+
+	@media only screen and (max-width: 661px) {
+		padding-top: 42px;
+	}
+
+	@media only screen and (max-width: 588px) {
+		padding: 40px 20px 60px;
+		width: 100%;
+	}
+}
+
+.site-title {
+	margin-bottom: 50px;
+	font-weight: 500;
+	font-size: 26px;
+	line-height: 30px;
+	color: #121738;
+
+	// Adjustments for smaller screens
+
+	@media only screen and (max-width: 661px) {
+		margin-bottom: 37px;
+	}
+
+	@media only screen and (max-width: 588px) {
+		padding-left: 0px;
+	}
+
+	@media only screen and (max-width: 540px) {
+
+		span {
+			display: inline-block; // Keep 'Cloud Storage' on one line for mobiles
+		}
+	}
+
+	@media only screen and (max-width: 500px) {
+		padding-left: 0px;
+	}
+
+	@media only screen and (max-width: $mobile_breakpoint) {
+		margin-bottom: 33px;
+	}
+}
+
+.main {
+
+	/**
+	 * Main layout rules for site. Uses CSS grid and adjusts 
+	 * template part location as screen size reduces 
+	 */
+	display: grid;
+	grid-template-areas:
+		"banner content"
+		"banner products"
+		". additional";
+	grid-template-columns: 1fr 2fr;
+
+	// Products go full width underneath banner and text
+	@media only screen and (max-width: $mid_breakpoint) {
+		grid-template-areas:
+			"banner content"
+			"products products"
+			"additional additional";
+	}
+
+	// All content stacks
+	@media only screen and (max-width: 637px) {
+		display: block;
+	}
+}
+
+// Main image container. The 'banner' grid area
+.banner {
+
+	margin-right: 50px;
+	margin-bottom: 48px;
+	grid-area: banner;
+
+	// Adjustments for smaller screens
+
+	@media only screen and (max-width: 886px) {
+		margin-bottom: 25px;
+		margin-right: 38px;
+	}
+
+	@media only screen and (max-width: 588px) {
+		padding-left: 23px;
+	}
+
+	@media only screen and (max-width: 637px) {
+		padding-left: 0;
+		padding-right: 0;
+		margin-right: 0;
+	}
+
+	img {
+
+		// Adjustments for smaller screen sizes
+
+		@media only screen and (max-width: 637px) {
+			width: 100%;
+		}
+	}
+}
+
+// The 'content' grid area
+.content-wrap {
+	grid-area: content;
+}
+
+.content {
+	padding-top: 19px;
+	margin-bottom: 40px;
+
+	// Adjustments for smaller screens
+
+	@media only screen and (max-width: $mobile_breakpoint) {
+		margin-bottom: 40px;
+		padding-top: 0;
+	}
+
+	@media only screen and (max-width: 886px) {
+		padding-top: 4px;
+	}
+	
+
+	@media only screen and (max-width: 588px) {
+		padding-right: 23px;
+	}
+
+	// Main page title (not site title)
+	h1 {
+		font-weight: 400;
+		font-size: 72px;
+		line-height: 61.92px;
+		margin-bottom: 30px;
+		color: rgba(18, 23, 56, 1);
+
+		// Adjustments for smaller screens
+
+		@media only screen and (max-width: 886px) {
+			font-size: 57px;
+			line-height: 50px;
+		}
+
+		@media only screen and (max-width: 615px) {
+			font-size: 57px;
+			line-height: 50px;
+		}
+
+		@media only screen and (max-width: $mobile_breakpoint) {
+			font-size: 42px;
+			line-height: 36.6px;
+		}
+	}
+
+	// The main page description
+	p {
+		font-weight: 400;
+		font-size: 16px;
+		line-height: 28.8px;
+		color: rgba(18, 17, 39, 0.72);
+		margin-bottom: 35px;
+
+		&:last-child {
+			margin-bottom: 0px; // No margin on the last paragraph
+		}
+
+		@media only screen and (max-width: $mobile_breakpoint) {
+			font-size: 15px;
+			line-height: 27px;
+		}
+	}
+
+}
+
+
+// The 'product' template area
+// This table includes header, settings and product list
+.product-table {
+	grid-area: products;
+}
+
+.product-table__header {
+
+	// Display flex to layout and align setting buttons 
+	display: flex;
+	justify-content: space-between; 
+	align-items: center;
+	margin-bottom: 25px;
+
+	@media only screen and (max-width: $mobile_breakpoint) {
+		margin-bottom: 26px;
+	}
+
+	// Table header 'SELECT BELOW'
+	h3 {
+		color: #acacac;
+		font-weight: 600;
+		font-size: 11px;
+		line-height: 11px;
+		letter-spacing: 2.9px;
+		text-transform: uppercase;
+	}
+}
+
+// The 'Order By' and 'Showing All' settings
+.settings {
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+
+	a { // Settings buttons are <a> in <div> to mimic an HTML button, without the styles overhead.
+		display: flex;
+		align-content: center;
+		color: rgba(27, 27, 27, 1);
+	}
+}
+
+// The 'Showing All' filter
+.filter {
+
+	// Remove on smaller screens
+	@media only screen and (max-width: 515px) {
+		display: none;
+	}
+
+	// Small SVG circle 
+	img {
+		margin-right: 15px; 
+	}
+}
+
+// The 'Order By' button
+.order-by {
+	margin-left: 30px;
+	background: #ffffff;
+	border: 1px solid rgba(18, 17, 39, 0.1);
+	border-radius: 5px;
+	padding: 14px 20px;
+	position: relative;
+
+	// Dropdown caret
+	img {
+		margin-left: 10px;
+	}
+}
+
+// Order by options 'Highest, lowest'
+// Dropdown, hidden by default. 
+.order-by__options {
+	position: absolute;
+	justify-content: space-between;
+	border: 1px solid rgba(18, 17, 39, 0.1);
+	border-radius: 5px;
+	padding: 14px 20px;
+	background: #ffffff;
+	right: 0;
+	top: 48px;
+	width: 243px;
+	display: none;
+	z-index: 100; // Above screenmask, so we can click outside to close (not implemented)
+
+	a {
+		font-weight: 400;
+		color: $primary_colour;
+	}
+}
+
+// Products container
+.products {
+	width: 100%;
+	height: 500px; // Just a default height so page doesn't jump. It's unset as soon as products are added. 
+}
+
+// An individual product 
+.product {
+
+	// Flex to align image and product body
+	display: flex;
+	height: 110px;
+	padding: 16px;
+	margin-bottom: 20px;
+	background: #FFFFFF;
+	box-shadow: 0px 7px 24px 1px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+
+	@media only screen and (max-width: 568px) {
+		height: 88px;
+	}
+}
+
+.product__image {
+	margin-right: 15px;
+	height: 76px;
+
+	@media only screen and (max-width: 568px) {
+		height: 56px;
+	}
+
+}
+
+// The text area of each product
+.product__body {
+	
+	// Uses CSS grid to keep content aligned 
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr; // Split equally to thirds so price will always start at the same point for every product
+	width: 100%;
+	padding-top: 17px;
+
+	// Adjustments for smaller screens
+		
+	@media only screen and (max-width: 568px) {
+		padding-top: 9px;
+   		grid-template-columns: 1fr 0fr 1fr;  // Re-adjust price position for mobiles
+	}
+}
+
+// Product name and GB amount
+.product__info {
+	font-weight: 500;
+	min-width: 100px;
+
+	// Product name
+	h3 {
+		font-size: 17px;
+		color: rgba(30, 40, 64, 1);
+		margin-bottom: 11px;
+
+		@media only screen and (max-width: $mobile_breakpoint) {
+			margin-bottom: 6px;
+			padding-right: 10px;
+		}
+
+	}
+	// GB amount
+	p {
+		font-size: 13px;
+		color: rgba(172, 172, 172, 1);
+	}
+}
+
+.product__cost {
+	font-size: 15px;
+	font-weight: 500;
+	margin-top: 2px;
+
+	@media only screen and (max-width: $mobile_breakpoint) {
+		margin-top: 1px;
+		padding-right: 10px;
+	}
+}
+
+// The button to choose the product
+.product__select {
+
+	display: flex;
+	justify-content: end;
+	align-items: flex-start;
+	justify-self: end;
+	min-width: 173px; // So the button won't overflow. Width matches largest button width of 'Unavailable'
+
+
+	@media only screen and (max-width: 568px) {
+		min-width: 38px; // We've removed the button border and text now leaving only circle so the container can be smaller
+		margin-top: -3px;
+	}
+}
+
+// This <a> contains the button text and image
+.product__select-btn {
+	display: inline-flex;
+	align-items: center;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 30px;
+	padding-right: 3px;
+	min-height: 45px;
+	border: 1px solid $primary_colour;
+	border-radius: 24px;
+	color: rgba(27, 27, 27, 1);
+
+	&:hover {
+		text-decoration: underline;
+	}
+
+	// Small button for mobiles
+	@media only screen and (max-width: 568px) {
+		border: none;
+		padding: 0;
+	}
+
+	// So we can control the text 
+	span {
+		font-size: 14px;
+		margin-right: 21px;
+
+		// Small button again for mobiles
+		@media only screen and (max-width: 568px) {
+			display: none;
+		}
+	}
+
+	// Change styles for unavailble products
+	&.unavailable {
+		font-size: 12px;
+		border-color: rgba(0, 0, 0, 0.1);
+		color: rgba(27, 27, 27, 0.4);
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}
+
+// Error message if no products returned etc. 
+.error {
+	line-height: 21px;
+	font-size: 14px;
+	color: rgba(18, 17, 39, 0.72);
+}
+
+// The 'additional' template area
+.additional {
+	grid-area: additional;
+	font-size: 12px;
+	font-weight: 400;
+	padding-top: 17px;
+	text-align: center;
+	color: #5E5D6D;
+
+	.link-arrow {
+		padding-left: 5px;
+	}
+
+}
+
+// Loading Animation 
+// https://loading.io/css/
+
+.loading {
+	text-align: center;
+	width: 100%;
+}
+
+.lds-roller {
+	display: inline-block;
+	position: relative;
+	width: 80px;
+	height: 80px;
+}
+
+.lds-roller div {
+	animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+	transform-origin: 40px 40px;
+}
+
+.lds-roller div:after {
+	content: " ";
+	display: block;
+	position: absolute;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: #eee;
+	margin: -4px 0 0 -4px;
+}
+
+.lds-roller div:nth-child(1) {
+	animation-delay: -0.036s;
+}
+
+.lds-roller div:nth-child(1):after {
+	top: 63px;
+	left: 63px;
+}
+
+.lds-roller div:nth-child(2) {
+	animation-delay: -0.072s;
+}
+
+.lds-roller div:nth-child(2):after {
+	top: 68px;
+	left: 56px;
+}
+
+.lds-roller div:nth-child(3) {
+	animation-delay: -0.108s;
+}
+
+.lds-roller div:nth-child(3):after {
+	top: 71px;
+	left: 48px;
+}
+
+.lds-roller div:nth-child(4) {
+	animation-delay: -0.144s;
+}
+
+.lds-roller div:nth-child(4):after {
+	top: 72px;
+	left: 40px;
+}
+
+.lds-roller div:nth-child(5) {
+	animation-delay: -0.18s;
+}
+
+.lds-roller div:nth-child(5):after {
+	top: 71px;
+	left: 32px;
+}
+
+.lds-roller div:nth-child(6) {
+	animation-delay: -0.216s;
+}
+
+.lds-roller div:nth-child(6):after {
+	top: 68px;
+	left: 24px;
+}
+
+.lds-roller div:nth-child(7) {
+	animation-delay: -0.252s;
+}
+
+.lds-roller div:nth-child(7):after {
+	top: 63px;
+	left: 17px;
+}
+
+.lds-roller div:nth-child(8) {
+	animation-delay: -0.288s;
+}
+
+.lds-roller div:nth-child(8):after {
+	top: 56px;
+	left: 12px;
+}
+
+@keyframes lds-roller {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+// Grow effect from Hover.css  
+.hvr-grow {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+    transition-duration: 0.3s;
+    transition-property: transform;
+}
+
+.hvr-grow:hover,
+.hvr-grow:focus,
+.hvr-grow:active {
+    transform: scale(1.1);
+}
+
+// Fade in effect from Animate.css
+.animate__animated {
+	-webkit-animation-duration: 1s;
+	animation-duration: 1s;
+	-webkit-animation-duration: var(--animate-duration);
+	animation-duration: var(--animate-duration);
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both
+}
+
+@-webkit-keyframes fadeIn {
+	0% {
+		opacity: 0
+	}
+	to {
+		opacity: 1
+	}
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0
+	}
+	to {
+		opacity: 1
+	}
+}
+
+.animate__fadeIn {
+	-webkit-animation-name: fadeIn;
+	animation-name: fadeIn
+}
+
+
+/*
+ _   _ _   _ _ _ _   _
+| | | | |_(_) (_) |_(_)___ ___
+| |_| |  _| | | |  _| / -_|_-<
+ \___/ \__|_|_|_|\__|_\___/__/
+  // (or Trumps). Overrides & adjustments
+
+*/
+
+// If we need the primary colour
+.colour-primary {
+	color: $primary_colour;
+}
